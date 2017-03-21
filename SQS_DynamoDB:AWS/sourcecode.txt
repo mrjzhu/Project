@@ -1,0 +1,784 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingDeque;
+
+import javax.print.attribute.standard.PrinterLocation;
+
+public class client implements Runnable  {
+	
+	//the first queue to store the tasks
+	private LinkedBlockingDeque<String> list =new LinkedBlockingDeque<String>();
+	public LinkedBlockingDeque<String> getList() {
+		return list;
+	}
+
+	public void setList(LinkedBlockingDeque<String> list) {
+		this.list = list;
+	}
+
+
+
+
+
+	// the second queue to store the successful execution messages
+	private LinkedBlockingDeque<String> outlist =new LinkedBlockingDeque<String>();
+
+	public LinkedBlockingDeque<String> getOutlist() {
+		return outlist;
+	}
+
+	public void setOutlist(LinkedBlockingDeque<String> outlist) {
+		this.outlist = outlist;
+	}
+
+
+
+
+
+
+	@SuppressWarnings("resource")
+	public void client_queue() throws InterruptedException, IOException{
+
+		int i=0;
+
+	  	 String line="";
+		 BufferedReader file = null;
+		 
+		 //read tasks from txt file,
+  		while(true){
+				if(i==main.task_number){
+  					break;
+  				}
+  			synchronized (list){
+
+  				try {
+  					file = new BufferedReader(new InputStreamReader(new FileInputStream(main.addr)));
+  				} catch (FileNotFoundException e1) {
+  					e1.printStackTrace();
+  				}
+  				line=file.readLine();
+
+  				list.add(i+line);
+  				i++;
+  				list.notifyAll();
+  				file.close();
+  		}
+	  		}
+  		
+
+  	  	  main.flag=0;
+
+
+  		
+  		
+  		// when all tasks are executed by workers, show the number of tasks executed successfully
+	  	while(true){
+	  		System.out.print("");
+	  		if(worker.flag_check==1){
+	  			System.out.println(main.task_number+" succeed");
+	  			break;
+	  		}
+	  		
+	  	}
+	  	for(String a:outlist){
+	  		System.out.println(a);
+	  		
+	  	}
+	  	System.out.println(outlist.size()+" tasks succeed");
+  		
+	
+	}
+		
+	  	
+	
+		
+	
+   
+    public void run(){
+		try {
+			client_queue();
+		} catch (InterruptedException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    
+
+
+		
+
+		
+}
+
+
+
+
+
+
+import java.lang.reflect.Executable;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.function.Function;
+
+import javax.swing.text.TabableView;
+
+public class main {
+	public static int flag=1;
+	public static int task_number;
+	public static String addr="";
+	
+	// the main function to execute the whole program.
+	// to run the program, there are 3 arguments: Thread number, task number, file address(task file).
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+		task_number=Integer.valueOf(args[1]);
+		addr=args[2];
+		
+    	 LinkedBlockingDeque<String> inlist =new LinkedBlockingDeque<String>();
+    	 LinkedBlockingDeque<String> outlist =new LinkedBlockingDeque<String>();
+
+		client client =new client();
+		worker worker =new worker();
+		Thread t1 =new Thread(client,"client");
+		Thread w1 =new Thread(worker,"worker1");
+		Thread w2 =new Thread(worker,"worker2");
+		Thread w3 =new Thread(worker,"worker3");
+		Thread w4 =new Thread(worker,"worker4");
+		Thread w5 =new Thread(worker,"worker5");
+		Thread w6 =new Thread(worker,"worker6");
+		Thread w7 =new Thread(worker,"worker7");
+		Thread w8 =new Thread(worker,"worker8");
+		Thread w9 =new Thread(worker,"worker9");
+		Thread w10 =new Thread(worker,"worker10");
+		Thread w11 =new Thread(worker,"worker11");
+		Thread w12 =new Thread(worker,"worker12");
+		Thread w13 =new Thread(worker,"worker13");
+		Thread w14 =new Thread(worker,"worker14");
+		Thread w15 =new Thread(worker,"worker15");
+		Thread w16 =new Thread(worker,"worker16");
+
+		
+		client.setList(inlist);
+		worker.setList(inlist);
+		client.setOutlist(outlist);
+		worker.setOutlist(outlist);
+		
+		double start=System.currentTimeMillis();
+		t1.start();
+		if(Integer.valueOf(args[0])==1){
+			w1.start();	
+			
+			t1.join();
+			w1.join();
+		}
+		else if(Integer.valueOf(args[0])==2){
+			w1.start();
+			w2.start();
+			
+			t1.join();
+			w1.join();
+			w2.join();
+		}
+		else if(Integer.valueOf(args[0])==4){
+			w1.start();
+			w2.start();
+			w3.start();
+			w4.start();
+			
+			
+			t1.join();
+			w1.join();
+			w2.join();
+			w3.join();
+			w4.join();
+		}
+		else if(Integer.valueOf(args[0])==8){
+			w1.start();
+			w2.start();
+			w3.start();
+			w4.start();
+			w5.start();
+			w6.start();
+			w7.start();
+			w8.start();
+			
+			t1.join();
+			w1.join();
+			w2.join();
+			w3.join();
+			w4.join();
+			w5.join();
+			w6.join();
+			w7.join();
+			w8.join();
+		}
+		else if(Integer.valueOf(args[0])==16){
+			w1.start();
+			w2.start();
+			w3.start();
+			w4.start();
+			w5.start();
+			w6.start();
+			w7.start();
+			w8.start();
+			w9.start();
+			w10.start();
+			w11.start();
+			w12.start();
+			w13.start();
+			w14.start();
+			w15.start();
+			w16.start();
+			
+			t1.join();
+			w1.join();
+			w2.join();
+			w3.join();
+			w4.join();
+			w5.join();
+			w6.join();
+			w7.join();
+			w8.join();
+			w9.join();
+			w10.join();
+			w11.join();
+			w12.join();
+			w13.join();
+			w14.join();
+			w15.join();
+			w16.join();
+		}
+		else{
+			System.out.println("error");
+			System.exit(-1);
+		}
+		double time=System.currentTimeMillis()-start;
+		System.out.println("time: "+time+" ms");
+		System.out.println("throughout: "+1000*(task_number/time)+" task/s");
+		//t3.start();
+
+	}
+
+}
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingDeque;
+
+import org.w3c.dom.ls.LSInput;
+
+public class worker implements Runnable  {
+	
+
+
+	public static int flag_check=0;
+	public static int loop=0;
+
+	private LinkedBlockingDeque<String> list =new LinkedBlockingDeque<String>();
+	public LinkedBlockingDeque<String> getList() {
+		return list;
+	}
+
+	public void setList(LinkedBlockingDeque<String> list) {
+		this.list = list;
+	}
+
+	private LinkedBlockingDeque<String> outlist =new LinkedBlockingDeque<String>();
+
+	
+	public LinkedBlockingDeque<String> getOutlist() {
+		return outlist;
+	}
+
+	public void setOutlist(LinkedBlockingDeque<String> outlist) {
+		this.outlist = outlist;
+	}
+
+
+
+
+
+
+	public void worker_queue() throws InterruptedException{
+		String task="task";
+		// read the command from the first queue, than execute the sleep workload, if succeed, store the succeed message in the second queue.
+		while(true){
+	  				if(list.size()==0&main.flag==0){
+	  					flag_check=1;
+	  					break;
+	  				}
+	  				if(list.size()>0){
+
+	  				task=list.poll();
+	  				
+		  				String[] a=task.split(" ");
+		  				if(a[1].equals("sleep")){
+		  					Thread.sleep(Integer.valueOf(a[2]));
+		  					loop++;
+		  					outlist.add(Thread.currentThread().getName()+" task "+a[0]+" succeed");
+		  				}
+	  				
+		  				System.out.println(task);
+	  				
+
+
+	  		}
+		}
+	
+	}
+		
+	  	
+	
+		
+	
+   
+    public void run(){
+		try {
+			worker_queue();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    public static void print(String[][] data){
+    	for(int a=0;a<data.length;a++){
+    		for(int b=0;b<data[0].length;b++){
+    			System.out.print(data[a][b]+",");
+    		}
+    		System.out.println();
+    	}
+    }
+    
+
+
+		
+
+		
+}
+
+
+
+
+
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
+import com.amazonaws.services.dynamodbv2.model.KeyType;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
+import com.amazonaws.services.dynamodbv2.model.PutItemResult;
+import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.amazonaws.services.dynamodbv2.model.TableDescription;
+import com.amazonaws.services.dynamodbv2.util.Tables;
+
+/**
+ * This is to create DynamoDB table.
+ * Amazon DynamoDB service.
+ */
+public class AmazonDynamoDBSample {
+
+
+
+    static AmazonDynamoDBClient dynamoDB;
+
+  
+     
+    private static void init() throws Exception {
+        /*
+         */
+        AWSCredentials credentials = null;
+        try {
+            credentials = new ProfileCredentialsProvider("default").getCredentials();
+        } catch (Exception e) {
+            throw new AmazonClientException(
+                    "Cannot load the credentials from the credential profiles file. " +
+                    "Please make sure that your credentials file is at the correct " +
+                    "location (/Users/mac/.aws/credentials), and is in valid format.",
+                    e);
+        }
+        dynamoDB = new AmazonDynamoDBClient(credentials);
+        Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+        dynamoDB.setRegion(usWest2);
+    }
+
+    public static void main(String[] args) throws Exception {
+        init();
+
+            String tableName = "id_table";
+
+            // Create table if it does not exist yet
+            if (Tables.doesTableExist(dynamoDB, tableName)) {
+                System.out.println("Table " + tableName + " is already ACTIVE");
+            } else {
+                // Create a table with a primary hash key named 'id', which holds a string
+                CreateTableRequest createTableRequest = new CreateTableRequest().withTableName(tableName)
+                    .withKeySchema(new KeySchemaElement().withAttributeName("id").withKeyType(KeyType.HASH))
+                    .withAttributeDefinitions(new AttributeDefinition().withAttributeName("id").withAttributeType(ScalarAttributeType.S))
+                    .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L));
+                    TableDescription createdTableDescription = dynamoDB.createTable(createTableRequest).getTableDescription();
+                System.out.println("Created Table: " + createdTableDescription);
+
+                // Wait for it to become active
+                System.out.println("Waiting for " + tableName + " to become ACTIVE...");
+                Tables.awaitTableToBecomeActive(dynamoDB, tableName);
+            }
+
+            // Describe our new table
+            DescribeTableRequest describeTableRequest = new DescribeTableRequest().withTableName(tableName);
+            TableDescription tableDescription = dynamoDB.describeTable(describeTableRequest).getTable();
+            System.out.println("Table Description: " + tableDescription);
+
+           
+
+    }
+}
+
+package testproj2;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.codedeploy.model.InstanceNameAlreadyRegisteredException;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.CreateQueueRequest;
+import com.amazonaws.services.sqs.model.DeleteMessageRequest;
+import com.amazonaws.services.sqs.model.DeleteQueueRequest;
+import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
+import com.amazonaws.services.dynamodbv2.model.KeyType;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
+import com.amazonaws.services.dynamodbv2.model.PutItemResult;
+import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.amazonaws.services.dynamodbv2.model.TableDescription;
+import com.amazonaws.services.dynamodbv2.util.Tables;
+
+public class client {
+    static AmazonDynamoDBClient dynamoDB;
+
+	@SuppressWarnings({ "null", "resource", "unused" })
+	
+	// the main function to run the client, 2 arguments: task_number, file_address(task file) 
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+
+		
+		int task_number=Integer.valueOf(args[0]);
+	    String addr=args[1];
+
+		String dynam0db_name="id_table";
+		AWSCredentials credentials = null;
+        try {
+            credentials = new ProfileCredentialsProvider("default").getCredentials();
+        } catch (Exception e) {
+            throw new AmazonClientException(
+                    "Cannot load the credentials from the credential profiles file. " +
+                    "Please make sure that your credentials file is at the correct " +
+                    "location (/Users/mac/.aws/credentials), and is in valid format.",
+                    e);
+        }
+
+        AmazonSQS sqs = new AmazonSQSClient(credentials);
+        Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+        sqs.setRegion(usWest2);
+        
+        dynamoDB = new AmazonDynamoDBClient(credentials);
+        dynamoDB.setRegion(usWest2);
+        // List queues
+        System.out.println("Listing all queues in your account.\n");
+        for (String queueUrl : sqs.listQueues().getQueueUrls()) {
+            System.out.println("  QueueUrl: " + queueUrl);
+        }
+        System.out.println();
+        
+        List<String> myQueueurl=sqs.listQueues().getQueueUrls();
+        
+        // Send a message
+        System.out.println("Sending a message to MyQueue.\n");
+        List<String> id=new ArrayList<>();
+        String line=null;
+        double start=System.currentTimeMillis();
+        for(int i=0;i<task_number;i++){
+            BufferedReader file=new BufferedReader(new InputStreamReader(new FileInputStream(addr)));
+            line=file.readLine();
+            sqs.sendMessage(new SendMessageRequest(myQueueurl.get(0), i+line));
+            id.add(String.valueOf(i));
+            //put this message to DynamoDB (id, status)
+            DynamoDB_put(dynamoDB, newItem(String.valueOf(i), 0), dynam0db_name);
+        }
+
+        //receive message from queue2
+        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(myQueueurl.get(1));
+        int x=0;
+        while(true){
+        	if(x==task_number){
+        		break;
+        	}
+            List<Message> messages=sqs.receiveMessage(receiveMessageRequest).getMessages();
+            if(messages.size()>0){
+            	x++;
+                String[] mss=messages.get(0).getBody().split(" ");
+                if(id.contains(mss[0])){
+                	
+                	id.remove(id.indexOf(mss[0]));
+                	
+                	String messageReceiptHandle = messages.get(0).getReceiptHandle();
+                    sqs.deleteMessage(new DeleteMessageRequest(myQueueurl.get(1), messageReceiptHandle));  
+                    
+                }
+            }
+
+        }
+		double time=System.currentTimeMillis()-start;
+		System.out.println("");
+		System.out.println(x+" tasks succeed");
+		System.out.println("time: "+time+" ms");
+		System.out.println("Throughout: "+1000*task_number/time+" /s");
+	}
+	
+	// a function to store message in the DynamoDB table
+	public static void DynamoDB_put(AmazonDynamoDBClient dynamoDB, Map<String, AttributeValue> items, String TableName) {
+
+		try {
+			// Send a message
+			Map<String, AttributeValue> item = items;
+			PutItemRequest putItemRequest = new PutItemRequest(TableName, item);
+			PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
+			//System.out.println("Result: " + putItemResult);
+
+		} catch (AmazonServiceException ase) {
+			throw ase;
+		} catch (AmazonClientException ace) {
+			throw ace;
+		}
+
+	}
+	
+	//add item to DynamoDB table
+    private static Map<String, AttributeValue> newItem(String id, int status) {
+        Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
+        item.put("id", new AttributeValue(id));
+        item.put("status", new AttributeValue().withN(Integer.toString(status)));
+
+        return item;
+    }
+	
+
+
+}
+package testproj2;
+
+import java.lang.Thread.State;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.cloudformation.model.Change;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
+import com.amazonaws.services.dynamodbv2.model.PutItemResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.DeleteMessageRequest;
+import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+
+public class worker {
+
+    static AmazonDynamoDBClient dynamoDB;
+
+    //the main function to run the worker.
+	public static void main(String[] args) throws NumberFormatException, InterruptedException {
+		
+		// TODO Auto-generated method stub
+		 String dynam0db_name="id_table";
+		 AWSCredentials credentials = null;
+	        try {
+	            credentials = new ProfileCredentialsProvider("default").getCredentials();
+	        } catch (Exception e) {
+	            throw new AmazonClientException(
+	                    "Cannot load the credentials from the credential profiles file. " +
+	                    "Please make sure that your credentials file is at the correct " +
+	                    "location (/Users/mac/.aws/credentials), and is in valid format.",
+	                    e);
+	        }
+
+	        AmazonSQS sqs = new AmazonSQSClient(credentials);
+	        Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+	        sqs.setRegion(usWest2);
+	        
+	        dynamoDB = new AmazonDynamoDBClient(credentials);
+	        dynamoDB.setRegion(usWest2);
+	        
+	        List<String> myQueueurl=sqs.listQueues().getQueueUrls();
+
+	        // Receive messages
+            System.out.println("Receiving messages from MyQueue.\n");
+            ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(myQueueurl.get(0));
+            receiveMessageRequest.setMaxNumberOfMessages(10);
+            while(true){
+
+                List<Message> messages=sqs.receiveMessage(receiveMessageRequest).getMessages();
+                if(messages.size()>0){
+	                for(int i=0;i<messages.size();i++){
+		                System.out.println(messages.get(i).getBody());
+		                String[] mss=messages.get(i).getBody().split(" ");
+		                //check on the dynamoDB
+		               if(DynamoDBscan(dynamoDB, mss[0], dynam0db_name)){
+		            	   //execute tasks
+			                if(mss[1].equals("sleep")){
+			                	Thread.sleep(Integer.valueOf(mss[2]));
+			                }
+			                //Change the State of Item 0 to 1
+			                DynamoDB_put(dynamoDB, newItem(mss[0], 1), dynam0db_name);
+			                sqs.sendMessage(new SendMessageRequest(myQueueurl.get(1),messages.get(i).getBody()));
+		                
+		                //delete messages
+		                String messageReceiptHandle = messages.get(i).getReceiptHandle();
+		                sqs.deleteMessage(new DeleteMessageRequest(myQueueurl.get(0), messageReceiptHandle));
+			                
+		               }
+	                }
+
+
+            }
+            
+
+
+
+	}
+            }
+	
+	public static boolean DynamoDBscan(AmazonDynamoDBClient dynamoDB, String id, String TableName) {
+
+		try {
+			HashMap<String, Condition> scanFilter = new HashMap<String, Condition>();
+	        Condition condition = new Condition()
+	            .withComparisonOperator(ComparisonOperator.EQ.toString())
+	            .withAttributeValueList(new AttributeValue().withS(id));
+	        scanFilter.put("id", condition);
+	        ScanRequest scanRequest = new ScanRequest(TableName).withScanFilter(scanFilter);
+	        ScanResult scanResult = dynamoDB.scan(scanRequest);
+	        if(scanResult.getItems().get(0).get("status").getN().equals("0")){
+	        	return true;
+	        }
+	        else{
+		        return false;
+
+	        }
+
+		} catch (AmazonServiceException ase) {
+			throw ase;
+		} catch (AmazonClientException ace) {
+			throw ace;
+		}
+
+	}
+	
+    private static Map<String, AttributeValue> newItem(String id, int status) {
+        Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
+        item.put("id", new AttributeValue(id));
+        item.put("status", new AttributeValue().withN(Integer.toString(status)));
+
+        return item;
+    }
+    
+	@SuppressWarnings("unused")
+	public static void DynamoDB_put(AmazonDynamoDBClient dynamoDB, Map<String, AttributeValue> items, String TableName) {
+
+		try {
+			// Send a message
+			Map<String, AttributeValue> item = items;
+			PutItemRequest putItemRequest = new PutItemRequest(TableName, item);
+			PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
+			//System.out.println("Result: " + putItemResult);
+
+		} catch (AmazonServiceException ase) {
+			throw ase;
+		} catch (AmazonClientException ace) {
+			throw ace;
+		}
+
+	}
+}
+
+
+
