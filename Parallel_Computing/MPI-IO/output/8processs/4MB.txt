@@ -1,0 +1,5 @@
+Write time:  0.507281 seconds
+Read time:  0.166935 seconds
+overall_time:  0.697251 seconds
+write bandwidth:  63.081408 MB/s
+read bandwidth:  191.690372 MB/s
