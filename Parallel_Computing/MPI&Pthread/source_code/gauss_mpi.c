@@ -2,9 +2,6 @@
  * Compile with "gcc gauss.c" 
  */
 
-/* ****** ADD YOUR CODE AT THE END OF THIS FILE. ******
- * You need not submit the provided code.
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -191,9 +188,7 @@ int main(int argc, char *argv[]) {
   exit(0);
 }
 
-/* ------------------ Above Was Provided --------------------- */
 
-/****** You will replace this routine with your own parallel version *******/
 /* Provided global variables are MAXN, N, A[][], B[], and X[],
  * defined in the beginning of this code.  X[] is initialized to zeros.
  */

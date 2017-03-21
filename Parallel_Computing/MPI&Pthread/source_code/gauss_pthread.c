@@ -2,9 +2,7 @@
  * Compile with "gcc gauss.c" 
  */
 
-/* ****** ADD YOUR CODE AT THE END OF THIS FILE. ******
- * You need not submit the provided code.
- */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,10 +30,7 @@ volatile float A[MAXN][MAXN], B[MAXN], X[MAXN];
 #define randm() 4|2[uid]&3
 
 /* Prototype */
-void gauss();  /* The function you will provide.
-		* It is this routine that is timed.
-		* It is called only on the parent.
-		*/
+void gauss();  
 void gauss_pthread();
 
 void print_to_file();
@@ -188,9 +183,6 @@ int main(int argc, char **argv) {
   exit(0);
 }
 
-/* ------------------ Above Was Provided --------------------- */
-
-/****** You will replace this routine with your own parallel version *******/
 /* Provided global variables are MAXN, N, A[][], B[], and X[],
  * defined in the beginning of this code.  X[] is initialized to zeros.
  */
